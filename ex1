@@ -1,0 +1,42 @@
+<?php
+if(!isset($_COOKIE['fond']) AND !isset($_COOKIE['texte']) )
+{
+$fond=$_POST['fond'];
+$texte=$_POST['texte'];
+$expir=time() + 2*30*24*3600;
+setcookie("fond",$fond,$expir);
+setcookie("texte",$texte,$expir);
+}
+else
+{
+$fond=$_COOKIE['fond'];
+$texte=$_COOKIE['texte'];
+}
+?>
+<!DOCTYPE>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title> SiteColour</title>
+<style type="text/css" >
+body{background-color:  ; color:  ;}
+legend{font-weight:bold;font-family:cursive;}
+label{font-weight:bold;font-style:italic;}
+</style>
+</head>
+<body>
+<form method="post" action="ch12exo1.php">
+<fieldset>
+<legend>Choisissez vos couleurs</legend>
+<label>Couleur de fond
+<input type="text" name="fond" />
+</label><br /><br />
+<label>Couleur de texte
+<input type="text" name="texte" />
+</label><br />
+<input type="submit" value="Envoyer" />  
+<input type="reset" value="Effacer" />
+</fieldset>
+</form>
+</body>
+</html>
