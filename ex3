@@ -1,0 +1,86 @@
+<?php
+if(isset($_COOKIE['nom']) AND isset($_COOKIE['pass']))
+{
+$login="Dasso";
+$motpass="123456";
+$nom=$_COOKIE['nom'];
+$pass=$_COOKIE['pass'];
+//Vérification et création du contenu personnalisé
+if($nom==$login AND $pass==$motpass)
+{
+$message= "<h1> GOOD MORNING ".ucfirst($nom)."</h1>";
+$contenu="<p> Contenu personnalisé.............</p>";
+}
+else
+{
+echo "<script type=\"text/javascript\">
+window.location='ch12exo3a.php' ;</script>";
+}
+}
+else
+{
+echo "<script type=\"text/javascript\">
+window.location='ch12exo3a.php' </script>";
+}
+?>
+<!DOCTYPE>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Accès réservé au site</title>
+</head>
+<body>
+<?php
+echo $message;
+echo $contenu;
+?>
+</body>
+</html>
+La page de saisie du nom et du mot de passe nommée ch12exo3a.php.
+<!DOCTYPE>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Accès réservé au site</title>
+</head>
+<body>
+<form method="post" action="ch12exo3.php">
+<fieldset>
+<legend>Saisissez votre nom et mot de passe</legend>
+<label>Nom :
+<input type="text" name="nom" />
+</label><br /><br />
+<label>Pass :
+<input type="text" name="pass" />
+</label><br />
+<input type="submit" value="Envoyer" />  
+<input type="reset" value="Effacer" />
+</fieldset>
+</form>
+</body>
+</html>
+La page ch12exo3.php qui traite les données du formulaire de saisie et redirige vers la page à accès réservé ou la page de saisie selon le cas.
+<?php
+//Nom et pass associé autorisant l'accès au site
+//En pratique ils proviennent d'une base de données
+$login="machin";
+$motpass="123456";
+//Récupération des valeurs saisies
+$nom=$_POST['nom'];
+$pass=$_POST['pass'];
+//Vérification
+if($nom==$login AND $pass===$motpass)
+{
+  $expir=time() + 200;
+  //Ecriture des cookies
+  setcookie("nom",$nom,$expir);
+  setcookie("pass",$pass,$expir);
+  //Redirection vers la page à accès réservé
+  echo "<script type=\"text/javascript\"> window.location='ch12exo3b.php' </script>";
+}
+else
+{
+  //Redirection to the text page code 
+  echo "<script type=\"text/javascript\"> window.location='ch12exo3a.php' </script>";
+}
+?>
