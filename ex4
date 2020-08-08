@@ -1,0 +1,51 @@
+<?php
+//Détection du cookie et redirection éventuelle vers la page
+préférée
+if(isset($_COOKIE['mapage']))
+{
+  $page=$_COOKIE['mapage'];
+  header("Location:$page");
+}
+//
+if(isset($_POST['mapage']))
+{
+  $page=$_POST['mapage'];
+  setcookie("mapage",$_POST['mapage'],time()+10);
+  header("Location:$page");
+  echo "Vous avez choisi ",$_POST['mapage'],"
+";
+}
+?>
+<!DOCTYPE>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Choisissez votre page préférée</title>
+</head>
+<body>
+<form method="post" action="ch12exo4.php">
+<fieldset>
+<legend>Choisissez votre page préférée</legend>
+<select name="mapage">
+<option value="ch12exo4.php">Accueil</option>
+<option value="MyMOORE.html">Cinéma</option>
+<option value="BEFRESH.html">Voyages
+</select>
+<br />
+<input type="submit" value="Envoyer" />  
+<input type="reset" value="Effacer" />
+</fieldset>
+</form>
+</body>
+</html>
+Il faut créer les pages MyMOORE.html et BEFRESH.html correspondant aux choix "MOORE" et "BEFRESH" sur le modèle suivant:
+<!DOCTYPE>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Votre page préférée
+</head>
+<body>
+<h3>MOORE</h3>
+</body>
+</html>
