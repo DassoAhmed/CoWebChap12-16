@@ -1,0 +1,117 @@
+<!DOCTYPE>
+<html>
+<head>
+<title>Type models charcteristics</title>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+</head>
+<body>
+<form action= "" name="form1" method="post" enctype="application/x-www-form-urlencoded">
+<fieldset>
+<legend><b>Register a vehicle </b></legend>
+<table>
+<tr colspan="2"><td><b>Owner</b></td></tr>
+<tr><td>Nom : </td><td><input type="text" name="nom" size="40" maxlength="10"/></td></tr>
+<tr><td>Prénom : </td><td><input type="text" name="prenom" size="40" maxlength="30"/></td></tr>
+<tr><td>Adresse : </td><td><input type="text" name="adresse" size="40" maxlength="30"/></td></tr>
+<tr><td>Ville : </td><td><input type="text" name="ville" size="40" maxlength="30"/></td></tr>
+<tr><td>Code postal : </td><td><input type="text" name="codepostal" size="40" maxlength="5"/></td></tr>
+<tr colspan="2"><td><b>Modèle</b></td></tr>
+<tr><td>Marque : </td><td><input type="text" name="marque" size="40" maxlength="30" />
+<input type="submit" name ="cherchemod" value=" Chercher les modèles " /></td>
+</tr>
+<?php
+if(isset($_POST['cherchemod']))
+{
+include_once('connex.inc.php');
+$marque=mysql_escape_string($_POST['marque']);
+//Requète SQL
+$requete="SELECT DISTINCT id_modele,modele FROM modele WHERE
+modele LIKE '%$marque%'";
+$idcom=connex('voitures','myparam');
+$result=mysql_query($requete,$idcom);
+echo "<tr><td>Les modèles</td> <td><select name=\"id_modele\">";
+while($ligne=mysql_fetch_array($result,MYSQL_NUM))
+{
+echo " <option value=\"$ligne[0]\">$ligne[1]</option>";
+}
+echo "</select></td></tr>";
+}
+?>
+<tr><td>Carburant : </td>
+<td><select name="carburant">
+<option value="essence">Essence</option>
+<option value="diesel">Diesel</option>
+<option value="électrique">Electrique</option>
+</select></td>
+</tr>
+<tr colspan="2"><td><b>Voiture</b></td></tr>
+<tr>
+<td>Numéro d'immatriculation</td>
+<td><input type="text" name="immat" /></td>
+</tr>
+<tr><td>Couleur : </td>
+<td><select name="couleur">
+<option value="claire">Claire</option>
+<option value="moyenne">Moyenne</option>
+<option value="foncée">Foncée</option>
+</select></td>
+</tr>
+<tr>
+<td>Date 1ere immatriculation AAAA-MM-JJ</td>
+<td><input type="text" name="datevoiture" /></td>
+</tr>
+<td>Date de la carte grise AAAA-MM-JJ</td>
+<td><input type="text" name="datecarte" /></td>
+</tr>
+<tr>
+<td><input type="reset" value=" Effacer " /></td>
+<td><input type="submit" value="ENREGISTRER" name="enreg" /></td>
+</tr>
+</table>
+</fieldset>
+</form>
+<?php
+include_once('connex.inc.php');
+if(isset($_POST['enreg']))
+{
+//Récupération des valeurs du formulaire
+$id_modele=mysql_escape_string($_POST['id_modele']);
+$carburant=mysql_escape_string($_POST['carburant']);
+$immat=mysql_escape_string($_POST['immat']);
+$couleur=mysql_escape_string($_POST['couleur']);
+$datevoiture=mysql_escape_string($_POST['datevoiture']);
+$datecarte=mysql_escape_string($_POST['datecarte']);
+$nom=mysql_escape_string($_POST['nom']);
+$prenom=mysql_escape_string($_POST['prenom']);
+$adresse=mysql_escape_string($_POST['adresse']);
+$ville=mysql_escape_string($_POST['ville']);
+$codepostal=mysql_escape_string($_POST['codepostal']);
+//Connexion
+$idcom=connex('voitures','myparam');
+//Requète SQL: insertions dans la table voiture
+$requete="INSERT INTO voiture VALUES('$immat','$id_modele','$couleur','$datevoiture')";
+$result1=mysql_query($requete,$idcom);
+//Requète SQL: insertions dans la table proprietaire
+$requete="INSERT INTO proprietaire VALUES('','$nom','$prenom','$adresse','$ville','$codepostal')";
+$result2=mysql_query($requete,$idcom);
+$id_pers=mysql_insert_id($idcom);
+//Requète SQL: insertions dans la table cartegrise
+$requete="INSERT INTO cartegrise VALUES('$id_pers','$immat','$datecarte')";
+$result3=mysql_query($requete,$idcom);
+//Requète SQL: insertions dans la table
+if(!$result1)
+{
+  echo mysql_errno();
+  echo mysql_error();
+  echo "<script type=\"text/javascript\"> alert('Erreur : ".mysql_error()."')</script>";
+}
+else
+{
+  echo "<script type=\"text/javascript\">";
+  echo "alert('Car licence registered ')</script>";
+}
+}
+else {"<h3>Form Completed!</h3>";}
+?>
+</body>
+</html>
