@@ -1,0 +1,41 @@
+<!DOCTYPE>
+<html>
+<head>
+<title>Search for model Propritor</title>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+</head>
+<body>
+<form action= "" name="form1" method="post" enctype="application/x-www-form-urlencoded">
+<fieldset>
+<legend><b>Choose model</b></legend>
+<table>
+<tr><td>Mark and model</td><td><input type="text" name="modele" maxlength=" " /></td></tr>
+<td><input type="submit" value="Chercher" /></td>
+</tr>
+</table>
+</fieldset>
+</form>
+<?php
+if(isset($_POST['modele']))
+{
+include_once('connex.inc.php');
+$modele=mysql_escape_string($_POST['modele']);
+//Requète SQL
+$requete="SELECT proprietaire.nom,proprietaire.prenom FROM
+voiture,modele,proprietaire,cartegrise WHERE modele LIKE
+'%$modele%' AND voiture.id_modele=modele.id_modele AND
+cartegrise.immat=voiture.immat AND
+proprietaire.id_pers=cartegrise.id_pers";
+$idcom=connex('voitures','myparam');
+$result=mysql_query($requete,$idcom);
+echo "<table border=\"1\" >";
+while($ligne=mysql_fetch_array($result,MYSQL_NUM))
+{
+echo " <tr><td>$ligne[0]</td><td> $ligne[1]</td>";
+}
+echo "</table>";
+}
+else {"<h3>Formulaire à compléter!</h3>";}
+?>
+</body>
+</html>
