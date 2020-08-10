@@ -1,0 +1,41 @@
+<!DOCTYPE>
+<html>
+<head>
+<title>Inquiries for a personal car</title>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+</head>
+<body>
+<form action= "" name="form1" method="post" enctype="application/x-www-form-urlencoded">
+<fieldset>
+<legend><b>Personal details</b></legend>
+<table>
+<tr><td>Nom : </td><td><input type="text" name="nom" /></td></tr>
+<tr><td>Prénom : </td><td>
+</td></tr>
+<td><input type="submit" value="Chercher" /></td>
+</tr>
+</table>
+</fieldset>
+</form>
+<?php
+if(isset($_POST['nom']) && isset($_POST['prenom']))
+{
+ include_once('connex.inc.php');
+ $nom=mysql_escape_string($_POST['nom']);
+ $prenom=mysql_escape_string($_POST['prenom']);
+ //Requète SQL
+ $requete="SELECT voiture.immat,modele.modele FROM voiture,modele,proprietaire,cartegrise WHERE proprietaire.nom='$nom' AND proprietaire.prenom='$prenom' AND proprietaire.id_pers=cartegrise.id_pers AND voiture.id_modele=modele.id_modele AND cartegrise.immat=voiture.immat";
+ $idcom=connex('voitures','myparam');
+ $result=mysql_query($requete,$idcom);
+ echo "<h3>Liste des véhicules de $prenom $nom </h3>";
+ echo "<table border=\"1\" >";
+ while($ligne=mysql_fetch_array($result,MYSQL_NUM))
+ {
+  echo " <tr><td> ",$ligne[0]," 75  </td><td> ",$ligne[1]," </td>";
+ }
+ echo "</table>";
+}
+else {"<h3>Form Complete</h3>";}
+?>
+</body>
+</html>
