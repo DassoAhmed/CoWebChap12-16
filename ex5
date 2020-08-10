@@ -1,0 +1,12 @@
+<?php
+$tabadresse=array("dassoahmed@gmail.com","katinFomakong@gmail.com","Paulnyek@gmail.com");
+$objet="Message";
+$message="Bonjour de Dasso";
+foreach($tabadresse as $dest)
+{
+  if(mail($dest,$objet,$message))
+  {
+    echo "Mail envoyé à $dest <br />";
+  }
+}
+?>
