@@ -1,0 +1,41 @@
+<!DOCTYPE>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>Reading of the modele table </title>
+<style type="text/css" >
+table {border-style:double;border-width: 3px;border-color:blue;background-color: #FFCCEE;}
+</style>
+</head>
+<body>
+<?php
+include("connex.inc.php");
+$idcom=connex("voitures","myparam");
+$requete="SELECT * FROM modele ORDER BY modele";
+$result=@mysql_query($requete,$idcom);
+if(!$result)
+{
+echo "Reading impossible";
+}
+else
+{
+$nbcol=mysql_num_fields($result);
+$nbmod=mysql_num_rows($result);
+78
+echo "<h3> Tous les $nbmod Car model</h3>";
+echo "<table border=\"1\">";
+echo "<th>Type du modele</th> <th>Marque et modèle</th><th>Carburant</th>";
+while($ligne=mysql_fetch_array($result,MYSQL_NUM))
+{
+echo "<tr>";
+foreach($ligne as $valeur)
+{
+echo "<td> $valeur </td>";
+}
+echo "</tr>";
+}
+echo "</table>";
+}
+?>
+</body>
+</html>
