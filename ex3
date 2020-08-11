@@ -36,7 +36,7 @@ echo $contenu;
 ?>
 </body>
 </html>
-La page de saisie du nom et du mot de passe nommée ch12exo3a.php.
+
 <!DOCTYPE>
 <html>
 <head>
@@ -59,7 +59,7 @@ La page de saisie du nom et du mot de passe nommée ch12exo3a.php.
 </form>
 </body>
 </html>
-La page ch12exo3.php qui traite les données du formulaire de saisie et redirige vers la page à accès réservé ou la page de saisie selon le cas.
+
 <?php
 //Nom et pass associé autorisant l'accès au site
 //En pratique ils proviennent d'une base de données
