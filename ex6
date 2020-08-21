@@ -1,13 +1,17 @@
 <?php
-$tabmailA=array("Dassoahmed@gmail.com","PHP 5.3","Du nouveau dans le langage du Web");
-$tabmailB=array("kantinFomekong@gmaill.com","MySQL 5","La base de données évolue");
-$tabmailC=array("Paulnyeck@gmail.com","AN 2010","Bonne année ");
+$tabmailA=array("tobi@gmail.com","le stage a commence","commence ton stage ");
+$tabmailB=array("Dassobills@gmail.com.com","microsoft access","La base de données
+évolue");
+$tabmailC=array("Dassoahmed@gmail.com","1 ans de plus ","hbd bro ");
 $tabmail=array($tabmailA,$tabmailB,$tabmailC);
 foreach($tabmail as $tab)
 {
-  if(mail($tab[0],$tab[1],$tab[2]))
-  {
-    echo "Mail envoyé à $tab[0] <br />";
-  }
+if(mail($tab[0],$tab[1],$tab[2]))
+{
+echo "Mail envoyé à $tab[0]";
+}
+else{
+    echo "echec";
+}
 }
 ?>
