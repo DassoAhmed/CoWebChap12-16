@@ -1,41 +1,134 @@
-<!DOCTYPE>
+<?php
+try {
+    if(isset($_POST['nom_vehicule'])&&isset($_POST['nom_model'])){
+        $nom_vehicule=$_POST['nom_vehicule'];
+        $mod_type=$_POST['nom_model'];
+    }
+    $db="voitures";
+    $host="localhost";
+    $user="root";
+    $passwd="";
+   
+    $cnx= new PDO("mysql:host=$host;dbname=$db",$user,$passwd);
+    $reqm = $cnx->prepare("SELECT nom_type FROM  model");
+    $reqm->execute();
+    $reqv = $cnx->prepare("SELECT nom FROM  vehicule");
+    $reqv->execute();
+  //  select p.nom , v.nom from proprietaire p , vehicule v ,posseder where num_cli =(select num_cli from posseder where matvehi=(select matricule from vehicule where nom = 'Chevrolet camaro'  and typemodel=(select numero_type from model where  nom_type= 'essence')))  and matvehi = (select matricule from vehicule where nom = 'Chevrolet camaro'  and typemodel=(select numero_type from model where  nom_type= 'essence')) 
+ 
+    
+//$sth->bindParam(':colour', $colour, PDO::PARAM_STR, 12);
+
+} catch (Exception $e) {
+    //throw $th;
+    $e->getMessage();
+}
+?>
+<!DOCTYPE html>
 <html>
 <head>
-<title>Search for model Propritor</title>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css">
+    <script src="main.js"></script>
 </head>
 <body>
-<form action= "" name="form1" method="post" enctype="application/x-www-form-urlencoded">
 <fieldset>
-<legend><b>Choose model</b></legend>
-<table>
-<tr><td>Mark and model</td><td><input type="text" name="modele" maxlength=" " /></td></tr>
-<td><input type="submit" value="Chercher" /></td>
-</tr>
-</table>
-</fieldset>
-</form>
+<legend>
+rechercher un proprietaire
+</legend>
+<form action="" method="post">
+<label for="nom_vehicule"> marque du vehicule</label>
+<select name="nom_vehicule" id="nom_vehicule">
 <?php
-if(isset($_POST['modele']))
-{
-include_once('connex.inc.php');
-$modele=mysql_escape_string($_POST['modele']);
-//Requète SQL
-$requete="SELECT proprietaire.nom,proprietaire.prenom FROM
-voiture,modele,proprietaire,cartegrise WHERE modele LIKE
-'%$modele%' AND voiture.id_modele=modele.id_modele AND
-cartegrise.immat=voiture.immat AND
-proprietaire.id_pers=cartegrise.id_pers";
-$idcom=connex('voitures','myparam');
-$result=mysql_query($requete,$idcom);
-echo "<table border=\"1\" >";
-while($ligne=mysql_fetch_array($result,MYSQL_NUM))
-{
-echo " <tr><td>$ligne[0]</td><td> $ligne[1]</td>";
+try {
+    $reqv->bindColumn('nom', $voiture);
+    //$response->bindColumn('numero_type', $numero);
+    while ($donnees=$reqv->fetch(PDO::FETCH_BOUND)){
+        echo "<option value='$voiture'>$voiture</option>";
+        
+        } 
+
+$reqv->closeCursor();
+
+} catch (Exception $g) {
+    //throw $th;
+    $g->getMessage();
 }
-echo "</table>";
-}
-else {"<h3>Formulaire à compléter!</h3>";}
 ?>
+</select>
+<label for="nom_model">Model</label>
+<select name="nom_model" id="nom_model">
+<?php
+try {
+    $reqm->bindColumn('nom_type', $nom);
+    //$response->bindColumn('numero_type', $numero);
+    while ($donnees=$reqm->fetch(PDO::FETCH_BOUND)){
+        echo "<option value='$nom'>$nom</option>";
+        
+        } 
+
+$reqv->closeCursor();
+
+} catch (Exception $f) {
+    //throw $th;
+    $f->getMessage();
+}
+?>
+</select>
+<input type="submit" value="rechercher">
+</form>
+</fieldset>
+<table>
+    <tr>
+    <td></td>
+    <td></td>
+    </tr>
+    
+    <?php
+    try{
+        $reqs= $cnx->prepare("select distinct p.nom as name ,Prenom, v.nom  as voiture from proprietaire p , vehicule v ,posseder where p.num =(select num_cli from posseder where matvehi=(select matricule from vehicule where nom = :nom  and typemodel=(select numero_type from model where  nom_type= :type)))  and v.matricule = (select matricule from vehicule where nom = :nom  and typemodel=(select numero_type from model where  nom_type= :type)) 
+        ");
+        $reqs->bindParam(':type',  $mod_type, PDO::PARAM_STR,80);
+        $reqs->bindParam(':nom', $nom_vehicule, PDO::PARAM_STR,80);
+        $reqs->execute();
+      //  numero_type
+      //  $donnees=$response->fetch(PDO::FETCH_BOUND);
+       // echo "$donnees";
+       echo $nom_vehicule;
+      //$result =$reqs->fetchall();
+      //        print_r($result);
+       //$reqs->bindColumn(1,$nom_proprio);
+        //$reqs->bindColumn(2,$nom_voiture);
+
+        
+        
+        $reqs->bindColumn('Prenom', $pname);
+        $reqs->bindColumn('name', $name);
+        $reqs->bindColumn("voiture",$voiture1);
+        $donnees=$reqs->fetch(PDO::FETCH_ASSOC);
+        print_r($donnees);
+        
+       
+       //echo "yes";
+            while ($donnees!=null){
+                echo "bonjour";
+                echo $name;
+                echo $pname;
+                echo $voiture1;
+                echo "<tr>"."<td>".$donnees['name']."</td>"."<td>".$pname."</td>"."</tr>";
+                $donnees=$reqs->fetch(PDO::FETCH_ASSOC);
+                } 
+  
+  
+           $reqs->closeCursor();
+    }catch(Exception $e){
+        $e->getMessage();
+    }
+    
+    ?>
+    </table>
 </body>
 </html>
