@@ -1,40 +1,165 @@
-<!DOCTYPE>
+<?php
+try{
+    $db="voitures";
+$host="localhost";
+$user="root";
+$passwd="";
+
+$cnx= new PDO("mysql:host=$host;dbname=$db",$user,$passwd);
+ if(isset($_POST['nom_complet_proprio'])&&isset($_POST['nom_model'])){
+
+    $nom_complet_proprio=$_POST['nom_complet_proprio'];
+    $mod_type=$_POST['nom_model'];
+    $cnx->beginTransaction();
+    if($cnx->inTransaction()){echo "Début transaction";}
+    try {
+        $reqv =$cnx->prepare("insert into posserder values(:nom_complet_proprio,:nom_model)");
+        $reqv->bindParam(':nom_complet_proprio',$nom_complet_proprio,PDO::PARAM_STR);
+        $reqv->bindParam(':nom_model',$mod_type,PDO::PARAM_STR);
+       $verif= $reqv->execute();
+    } catch (Exception $t) {
+       $t->getMessage();
+       echo "erreur";
+    }
+   
+    if($verif==2 ||$verif==1)
+{
+
+    $cnx->commit(); 
+echo "Insertions réussies de $verif lignes<br />";
+}
+else
+{
+    $cnx->rollBack(); 
+$tab_erreur=$cnx->errorInfo();
+echo "Insertions annulées. Erreur n° :",$tab_erreur[0],"<br />"; }
+    /*$reqv = $cnx->prepare("insert into posserder values(:nom_complet_proprio,:nom_model)");
+$reqv->execute([
+    'nom_complet_proprio'=>$nom_complet_proprio,
+   'nom_model'=> $mod_type]);
+   $reqv->closeCursor();*/
+}
+
+
+$reqm = $cnx->prepare("SELECT matricule, nom , nom_type from model ,vehicule  WHERE typemodel=numero_type");
+$reqm->execute();
+
+
+
+} catch (Exception $h) {
+//throw $th;
+$h->getMessage();
+}
+if(isset($_POST['prenom_proprio'])&& isset($_POST['prenom_proprio'])){
+    echo "bonhour";
+    try {
+      
+            $nom_prorpio=$_POST['nom_prorpio'];
+            echo $nom_prorpio;
+    $prenom_proprio=$_POST['prenom_proprio'];
+$request = "insert into proprietaire(nom,Prenom) values(:nom_prorpio,:prenom_prorpio)";
+
+/*$request=$cnx->prepare("insert into proprietaire(nom,Prenom) values(:nom_prorpio,:prenom_prorpio)");
+$request->execute([
+        'nom_prorpio'=>$nom_prorpio,
+       'prenom_prorpio'=> $prenom_proprio]);
+       echo "insertion reussi";
+$request->closeCursor();*/
+    } catch (Exception $e) {
+        //throw $th;
+        $e->getMessage();
+    }
+
+
+}
+try {
+    $requestnmpr=$cnx->prepare("select num, nom as givenname,Prenom from proprietaire");
+    $requestnmpr->execute();
+    //$data =$requestnmpr->fetchall();
+   // print_r($data);
+} catch (Exception $th) {
+    $th->getMessage();
+}
+?>
+
+<!DOCTYPE html>
 <html>
 <head>
-<title>Personal car inquiries</title>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css">
+    <script src="main.js"></script>
 </head>
 <body>
-<form action= "<?php echo $_SERVER['PHP_SELF'];?>" name="form1" method="post" enctype="application/x-www-form-urlencoded">
-<fieldset>
-<legend><b>Personal details</b></legend>
-<table>
-<tr><td>Nom : </td><td><input type="text" name="nom" /></td></tr>
-<tr><td>Prénom : </td><td><input type="text" name="prenom"/></td></tr>
-<td><input type="submit" value="Chercher" /></td>
-</tr>
-</table>
-</fieldset>
-</form>
-<?php
-if(isset($_POST['nom']) && isset($_POST['prenom']))
-{
- include_once('connex.inc.php');
- $nom=mysql_escape_string($_POST['nom']);
- $prenom=mysql_escape_string($_POST['prenom']);
- //Requète SQL
- $requete="SELECT voiture.immat,modele.modele FROM voiture,modele,proprietaire,cartegrise WHERE proprietaire.nom='$nom' AND proprietaire.prenom='$prenom' AND proprietaire.id_pers=cartegrise.id_pers AND voiture.id_modele=modele.id_modele AND cartegrise.immat=voiture.immat";
- $idcom=connex('voitures','myparam');
- $result=mysql_query($requete,$idcom);
- echo "<h3>Liste des véhicules de $prenom $nom </h3>";
- echo "<table border=\"1\" >";
- while($ligne=mysql_fetch_object($result))//1
- {
-  echo " <tr><td> ",$ligne->immat," 75  </td><td> ",$ligne->modele," </td>";//2
- }
- echo "</table>";
-}
-else {"<h3>Form completed!</h3>";}
-?>
+    <fieldset>
+        <legend>
+            inserer ou une carte grise
+        </legend>
+        <form method='post'>
+        <label for="nom_complet_proprio">Nom du proprietaire</label>
+            
+            <select name="nom_complet_proprio" id="nom_complet_proprio">
+            <?php
+                        try {
+                            $requestnmpr->bindColumn('num',$num);
+                            $requestnmpr->bindColumn('Prenom', $Prenom);
+                            $requestnmpr->bindColumn('givenname', $givenname);
+                            while ($donnees=$requestnmpr->fetch(PDO::FETCH_BOUND)){
+                                echo "<option value='$num'>$givenname $Prenom</option>";
+                                
+                                } 
+
+                                $requestnmpr->closeCursor();
+
+                        }catch(Exception $f) {
+                            //throw $th;
+                            $f->getMessage();
+                        }
+                    ?>
+
+                
+            </select>
+            <label for="nom_model">Model</label>
+            <select name="nom_model" id="nom_model">
+                <?php
+                        try {
+                            $reqm->bindColumn('nom', $nom);
+                            $reqm->bindColumn('matricule', $matricule);
+                            $reqm->bindColumn('nom_type', $nom_type);
+                            //$response->bindColumn('numero_type', $numero);
+                            while ($donnees=$reqm->fetch(PDO::FETCH_BOUND)){
+                                echo "<option value='$matricule'>$matricule  $nom $nom_type</option>";
+                                
+                                } 
+
+                        $reqm->closeCursor();
+
+                        } catch (Exception $f) {
+                            //throw $th;
+                            $f->getMessage();
+                        }
+                 ?>
+            </select>
+            <?php ?>
+            <input type="submit" value="Insert">
+        </form>
+        </fieldset>    
+    <fieldset>
+        <legend>
+        inserer un proprietaite
+        </legend>
+        <form method='post'>
+            <label for="prenom_proprio">Prenom Du proprietaire</label>
+            <input type="text" name="prenom_proprio" id="prenom_proprio">
+            <label for="nom_proprio">Nom du proprietaire</label>
+            <input type="text" name="nom_prorpio" id="nom_proprio">
+   
+            
+            <input type="submit" value="Insert">
+        </form>
+    </fieldset>
+   
 </body>
 </html>
