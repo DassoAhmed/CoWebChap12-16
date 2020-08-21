@@ -2,7 +2,7 @@
 try{
     //include_once("myparam.inc.php");
 $user="root";
-$passwd="";
+$passwd="root";
 $host="localhost";
 $db="voitures";
 $idcom= new PDO("mysql:host=$host;dbname=$db",$user,$passwd) ;
@@ -11,7 +11,7 @@ if(!$idcom)
 echo "Erreur";
 }
 else{
-    echo "coool";
+    echo "Good";
     $sth = $idcom->prepare("SELECT *  FROM  model");
 $sth->execute();
 
