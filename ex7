@@ -1,57 +1,29 @@
-<!DOCTYPE>
-<html>
- <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-  <title>Site Colour with sessions</title>
-  <style type="text/css" >
-  body{background-color: orange ; color: purple ;}
-  legend{font-weight:bold;font-family:cursive;}
-  label{font-weight:bold;font-style:italic;}
-  </style>
- </head>
- <body>
-  <div>
-   <form method="post" action="ch12exo7.php">
-    <fieldset>
-     <legend>Choose your coulors</legend>
-     <label>Fond color
-     <input type="text" name="fond" />
-     </label><br /><br />
-     <label>Texte Coulor
-     <input type="text" name="texte" />
-     </label><br />
-     <div>
-      <input type="submit" value="Envoyer" />  
-      <input type="reset" value="Effacer" />
-     </div>
-    </fieldset>
-   </form>
-   <p>Page contain
-    <a href="ch12exo7b.php">Lien vers la page B
-   </p>
-  </div>
- </body>
-</html>
-  Un exemple de page du site cible d’un lien de la page principale (fichier ch12exo7b.php). Toutes les pages liées qui récupèrent les paramètres de couleurs doivent contenir le même code PHP.
 <?php
 session_start();
+echo $_POST['fond'];
+$_SESSION['fond'] =$_POST['fond'];
+$_SESSION['texte'] =$_POST['texte'];
 $fond=$_SESSION['fond'];
 $texte=$_SESSION['texte'];
 ?>
-<!DOCTYPE>
+<!DOCTYPE html>
 <html>
- <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-  <title>Site Color with sessions</title>
-  <style type="text/css" >
-  body{background-color:  ; color:  ;}
-  legend{font-weight:bold;font-family:cursive;}
-  label{font-weight:bold;font-style:italic;}
-  </style>
- </head>
- <body>
-  <p>Page B contain 
-   <a href="ch12exo7.php">Lien vers la page principale</a>
-  </p>
- </body>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-
+8859-1" />
+<title>Couleurs du site avec des sessions</title>
+<style type="text/css" >
+
+body{background-color: <?php echo $fond ?> ; color: <?php echo
+$texte ?> ;}
+legend{font-weight:bold;font-family:cursive;}
+label{font-weight:bold;font-style:italic;}
+
+</style>
+</head>
+<body>
+<p>Contenu de la page B
+<a href="exo7partachap12.html">Lien vers la page principale</a>
+</p>
+</body>
 </html>
