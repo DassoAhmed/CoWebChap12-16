@@ -1,0 +1,28 @@
+<?php
+class Database{
+	public $pdo; 
+	
+	public function __construct(){
+		try{
+			$user="root";
+$passwd="";
+$host="localhost";
+$db="voitures";
+
+			$this->pdo = new PDO("mysql:host=$host;dbname=$db",$user,$passwd) ;
+		}catch(PDOException $e){
+			echo $e->getMessage();
+			die();
+		}
+	}
+	
+	public function getUser($login, $pwd){
+		$requete = "SELECT * FROM users WHERE login = ? AND pwd = ?";
+		$q = $this->pdo->prepare($requete); 
+		$q->execute(
+			array($login, $pwd)
+		);
+		$user = $q->fetch();
+		return $user;
+	}
+}
