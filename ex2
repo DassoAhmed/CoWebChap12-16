@@ -1,43 +1,43 @@
 <?php
-if(!isset($_COOKIE['couleur']['fond']) AND
-!isset($_COOKIE['couleur']['texte']) )
-{
-$fond=$_POST['fond'];
-$texte=$_POST['texte'];
-$expir=time() + 10;
-setcookie("couleur[fond]",$fond,$expir);
-setcookie("couleur[texte]",$texte,$expir);
-}
-else
-{
-$fond=$_COOKIE['couleur']['fond'];
-$texte=$_COOKIE['couleur']['texte'];
+if(isset($_POST['col_txt']) && isset($_POST['col_fnd'])){
+    $col_txt=$_POST['col_txt'];
+    $col_fnd=$_POST['col_fnd'];
+    setcookie("couleur[col_texte]",$col_txt);
+    setcookie("couleur[col_fond]",$col_fnd);
+    
 }
 ?>
-<!DOCTYPE >
+<?php
+$cookie1 =$_COOKIE['couleur']['col_texte'];
+$cookie2 =$_COOKIE['couleur']['col_fond'];
+echo $cookie2;
+?>
+
+<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title> SiteColour </title>
-<style type="text/css" >
-body{background-color:  ; color:  ;}
-legend{font-weight:bold;font-family:cursive;}
-label{font-weight:bold;font-style:italic;}
-</style>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css">
+   
 </head>
 <body>
-<form method="post" action="ch12exo2.php">
-<fieldset>
-<legend>Choisissez vos couleurs</legend>
-<label>Couleur de fond
-<input type="text" name="fond" />
-</label><br /><br />
-<label>Couleur de texte
-<input type="text" name="texte" />
-</label><br />
-<input type="submit" value="Envoyer" />  
-<input type="reset" value="Effacer" />
-</fieldset>
+<form  method="post" onload="mk_chng()">
+<label> couleur de texte <label>
+<input type="text" id="col_txt" name="col_txt" placeholder="votre couleur de texte ici"><br>
+<label> couleur de fond <label>
+<input type="text" id="col_fnd" name="col_fnd" placeholder="votre couleur de fond ici"><br>
+<input type="submit" value="submit">
 </form>
+<script>
+    alert("bbbbbbbbbbbb");
+    document.getElementById("col_fnd").style.backgroundColor="<?php echo  $cookie2 ?>";
+    document.getElementById("col_txt").style.color="<?php echo $cookie1 ?>";
+
+</script>
 </body>
 </html>
+
+
