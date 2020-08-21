@@ -1,42 +1,55 @@
 <?php
-if(!isset($_COOKIE['fond']) AND !isset($_COOKIE['texte']) )
-{
-$fond=$_POST['fond'];
-$texte=$_POST['texte'];
-$expir=time() + 2*30*24*3600;
-setcookie("fond",$fond,$expir);
-setcookie("texte",$texte,$expir);
+if(isset($_POST['col_txt'])){
+    $col_txt=$_POST['col_txt'];
+setcookie("col_texte",$col_txt);
 }
-else
-{
-$fond=$_COOKIE['fond'];
-$texte=$_COOKIE['texte'];
+if(isset($_POST['col_fnd'])){
+    $col_fnd=$_POST['col_fnd'];
+    setcookie("col_fond",$col_fnd);
+    
 }
 ?>
-<!DOCTYPE>
+<?php
+$cookie1 =$_COOKIE['col_texte'];
+$cookie2 =$_COOKIE['col_fond'];
+echo $cookie1;
+?>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title> SiteColour</title>
-<style type="text/css" >
-body{background-color:  ; color:  ;}
-legend{font-weight:bold;font-family:cursive;}
-label{font-weight:bold;font-style:italic;}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css">
+    <style>
+ 
+
+body{background-color: <?php echo $cookie2 ?> ;
+ color: <?php echo
+    $cookie1 ?> ;}
+
+
 </style>
+   
+   
 </head>
 <body>
-<form method="post" action="ch12exo1.php">
-<fieldset>
-<legend>Choisissez vos couleurs</legend>
-<label>Couleur de fond
-<input type="text" name="fond" />
-</label><br /><br />
-<label>Couleur de texte
-<input type="text" name="texte" />
-</label><br />
-<input type="submit" value="Envoyer" />  
-<input type="reset" value="Effacer" />
-</fieldset>
+<form  method="post" onload="mk_chng()">
+<label> couleur de texte <label>
+<input type="text" id="col_txt" name="col_txt" placeholder="votre couleur de texte ici"><br>
+<label> couleur de fond <label>
+<input type="text" id="col_fnd" name="col_fnd" placeholder="votre couleur de fond ici"><br>
+<input type="submit" value="submit">
 </form>
+<script>
+ //alert("aaaaaaaaaaaaaaa");
+</script>
+<script>
+    //alert("bbbbbbbbbbbb");
+   
+
+</script>
 </body>
 </html>
+
+
