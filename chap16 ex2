@@ -1,57 +1,48 @@
-<!DOCTYPE>
+<?php
+if(isset($_POST['num_mod'])&&isset($_POST['mod_type'])){
+    try {
+        $db="voitures";
+$host="localhost";
+$user="root";
+$passwd="";
+$num_model=$_POST['num_mod'];
+$mod_type=$_POST['mod_type'];
+$cnx= new PDO("mysql:host=$host;dbname=$db",$user,$passwd);
+$request=$cnx->prepare("insert into model values(:numero_type,:nom_type)");
+$request->execute([
+        'numero_type'=>$num_model,
+       'nom_type'=>$mod_type]);
+$request->closeCursor();
+    } catch (Exception $e) {
+        //throw $th;
+        $e->getMessage();
+    }
+
+
+}
+?>
+<!DOCTYPE html>
 <html>
 <head>
-<title>Type models characteristics</title>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css">
+    <script src="main.js"></script>
 </head>
 <body>
-<form action= "" method="post" enctype="application/x-www-form-urlencoded">
-<fieldset>
-<legend><b>Your details</b></legend>
-<table>
-<tr><td>Code du type : </td><td><input type="text" name="id_modele" size="40" maxlength="10"/></td></tr>
-<tr><td>Marque et modèle : </td><td><input type="text" name="modele" size="40" maxlength="30"/></td></tr>
-<tr><td>Carburant : </td>
-<td><select name="carburant">
-<option value="essence">Essence</option>
-<option value="diesel">Diesel</option>
-<option value="électrique">Electrique</option>
-</select></td>
-</tr>
-<tr>
-<td><input type="reset" value=" Effacer "></td>
-<td><input type="submit" value=" Envoyer "></td>
-</tr>
-</table>
-</fieldset>
-</form>
-<?php
-include('connex.inc.php');
-if(!empty($_POST['id_modele'])&& !empty($_POST['modele'])&&
-!empty($_POST['carburant']))
-{
-$id_modele=mysql_escape_string($_POST['id_modele']);
-$modele=mysql_escape_string($_POST['modele']);
-$carburant=mysql_escape_string($_POST['carburant']);
-//Requète SQL
-$requete="INSERT INTO modele
-VALUES('$id_modele','$modele','$carburant')";
-$idcom=connex('voitures','myparam');
-$result=mysql_query($requete,$idcom);
-if(!$result)
-{
-echo mysql_errno();
-echo mysql_error();
-echo "<script type=\"text/javascript\">
-alert('Erreur : ".mysql_error()."')</script>";
-}
-else
-{
-echo "<script type=\"text/javascript\">";
-echo "alert('The modl is registered ')</script>";
-}
-}
-else {echo "<h3>Formulaire à compléter!</h3>";}
-?>
+    <fieldset>
+    <legend>
+    insert in model table
+    </legend>
+    <form method='post'>
+    <label for="num_mod">Numero de Model</label>
+    <input type="text" name="num_mod" id="num_mod">
+    <label for="mod_type">Type de model</label>
+    <input type="text" name="mod_type" id="mod_type">
+    <input type="submit" value="Insert">
+    </form>
+    </fieldset>
 </body>
 </html>
