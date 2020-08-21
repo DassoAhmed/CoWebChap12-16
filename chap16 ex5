@@ -1,41 +1,74 @@
-<!DOCTYPE>
+<?php
+
+try {
+    if(isset($_POST['proprio'])){
+        $name=$_POST['proprio'];
+        //$mod_type=$_POST['nom_model'];
+    }
+    $db="voitures";
+    $host="localhost";
+    $user="root";
+    $passwd="";
+   
+    $cnx= new PDO("mysql:host=$host;dbname=$db",$user,$passwd);
+    //$reqm = $cnx->prepare("SELECT nom_type FROM  model");
+    //$reqm->execute();
+    $reqP= $cnx->prepare("SELECT nom , Prenom FROM   proprietaire ");
+    $reqP->execute();
+    $reqv=$cnx->prepare("select nom from vehicule WHERE vehicule.matricule=(select matvehi from posseder WHERE posseder.num_cli=(SELECT num FROM  proprietaire WHERE nom like :nom))");
+    $reqv->bindParam(':nom',$name,PDO::PARAM_STR);
+    $reqv->execute();
+   
+  //  select p.nom , v.nom from proprietaire p , vehicule v ,posseder where num_cli =(select num_cli from posseder where matvehi=(select matricule from vehicule where nom = 'Chevrolet camaro'  and typemodel=(select numero_type from model where  nom_type= 'essence')))  and matvehi = (select matricule from vehicule where nom = 'Chevrolet camaro'  and typemodel=(select numero_type from model where  nom_type= 'essence')) 
+ 
+    
+//$sth->bindParam(':colour', $colour, PDO::PARAM_STR, 12);
+
+} catch (Exception $e) {
+    //throw $th;
+    $e->getMessage();
+}
+?>
+
+<!DOCTYPE html>
 <html>
 <head>
-<title>Inquiries for a personal car</title>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css">
+    <script src="main.js"></script>
 </head>
 <body>
-<form action= "" name="form1" method="post" enctype="application/x-www-form-urlencoded">
 <fieldset>
-<legend><b>Personal details</b></legend>
-<table>
-<tr><td>Nom : </td><td><input type="text" name="nom" /></td></tr>
-<tr><td>Prénom : </td><td>
-</td></tr>
-<td><input type="submit" value="Chercher" /></td>
-</tr>
-</table>
-</fieldset>
-</form>
-<?php
-if(isset($_POST['nom']) && isset($_POST['prenom']))
-{
- include_once('connex.inc.php');
- $nom=mysql_escape_string($_POST['nom']);
- $prenom=mysql_escape_string($_POST['prenom']);
- //Requète SQL
- $requete="SELECT voiture.immat,modele.modele FROM voiture,modele,proprietaire,cartegrise WHERE proprietaire.nom='$nom' AND proprietaire.prenom='$prenom' AND proprietaire.id_pers=cartegrise.id_pers AND voiture.id_modele=modele.id_modele AND cartegrise.immat=voiture.immat";
- $idcom=connex('voitures','myparam');
- $result=mysql_query($requete,$idcom);
- echo "<h3>Liste des véhicules de $prenom $nom </h3>";
- echo "<table border=\"1\" >";
- while($ligne=mysql_fetch_array($result,MYSQL_NUM))
- {
-  echo " <tr><td> ",$ligne[0]," 75  </td><td> ",$ligne[1]," </td>";
- }
- echo "</table>";
+    <form action="" method="post">
+    <label for="proprio">Propietaire</label>
+    <select name="proprio" id="proprio">
+    <?php
+try {
+    $reqP->bindColumn('nom', $nom);
+    while ($donnees=$reqP->fetch(PDO::FETCH_BOUND)){
+        echo "<option value='$nom'>$nom</option>";
+        
+        } 
+
+$reqP->closeCursor();
+
+}catch(Exception $f) {
+    //throw $th;
+    $f->getMessage();
 }
-else {"<h3>Form Complete</h3>";}
 ?>
+
+    
+    </select>
+    <input type="submit" value="submit">
+    
+    <p><?php  echo $name; 
+    $data = $reqv->fetchAll();
+    print_r($data);?></p>
+    </form>
+</fieldset>
 </body>
 </html>
